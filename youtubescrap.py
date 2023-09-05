@@ -92,10 +92,10 @@ Data Analysis to enhance your data team.
     st.write("2022")
     st.write(
         """
-    - ✔️ Data Analytics Certification, Certiport 
-    - ✔️ Database Certification, Certiport  
-    - ✔️ Microsoft Excel 2019 Expert, Microsoft 
-    - ✔️ Microsoft Excel 2019 Associate, Microsoft 
+    - ✔️ [Data Analytics Certification](https://www.credly.com/badges/fb421988-9b39-472c-9be6-f6b0d9c7b338/public_url), Certiport 
+    - ✔️ [Database Certification](https://www.credly.com/badges/3c60bc6d-9a1b-41bd-9d04-f712063dd19d/public_url), Certiport  
+    - ✔️ [Microsoft Excel 2019 Expert](https://www.credly.com/badges/f6c0e511-37a3-4945-be63-6fc5a17844a2/public_url), Microsoft 
+    - ✔️ [Microsoft Excel 2019 Associate](https://www.credly.com/badges/e8945665-6188-48eb-bdb5-7173126ad740/public_url), Microsoft 
     """
     )
     st.write("---")
@@ -134,7 +134,7 @@ Data Analysis to enhance your data team.
     # --- JOB 2
     st.write('\n')
     st.write("🚧", "**Data Analyst Freelance | Windata**")
-    st.write("01/2018 - 02/2022")
+    st.write("12/2022 - 06/2023")
     st.write(
         """
     - ► Proficiently managed and analyzed data encompassing sentiment analysis, with a particular focus on prevailing topics in Indonesia. Employed advanced techniques to classify sentiments into negative, neutral, and positive categories
