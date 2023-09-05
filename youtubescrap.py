@@ -176,7 +176,7 @@ elif selected_page == "Youtube Scrap":
             replies = []
             api_service_name = "youtube"
             api_version = "v3"
-            DEVELOPER_KEY = os.getenv("api_key")  # Replace with your own YouTube API key
+            DEVELOPER_KEY = st.secrets["api_key"]  # Replace with your own YouTube API key
 
             youtube = googleapiclient.discovery.build(
                 api_service_name, api_version, developerKey=DEVELOPER_KEY
