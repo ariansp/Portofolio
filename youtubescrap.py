@@ -1,10 +1,12 @@
 import base64
-import config
 import streamlit as st
 import pandas as pd
 import googleapiclient.discovery
 from pathlib import Path
 from PIL import Image
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 # --- PATH SETTINGS ---
 css_file = "main.css"
@@ -174,7 +176,7 @@ elif selected_page == "Youtube Scrap":
             replies = []
             api_service_name = "youtube"
             api_version = "v3"
-            DEVELOPER_KEY = config.api_key  # Replace with your own YouTube API key
+            DEVELOPER_KEY = os.getenv("api_key")  # Replace with your own YouTube API key
 
             youtube = googleapiclient.discovery.build(
                 api_service_name, api_version, developerKey=DEVELOPER_KEY
