@@ -163,7 +163,15 @@ elif selected_page == "Youtube Scrap":
         # Function to extract video ID from the link ID
         def extract_video_id(video_link_id):
             # Extract the video ID from the link ID
-            video_id = video_link_id.split("v=")[-1]
+            if "youtube.com/watch?v=" in video_link_id:
+                video_id = video_link_id.split("v=")[1].split("&")[0]
+    # Check if the input is a short YouTube URL
+            elif "youtu.be" in video_link_id:
+                video_id = video_link_id.split("/")[-1]
+    # Handle other formats or invalid inputs
+            else:
+                st.warning("Invalid YouTube link. Please enter a valid YouTube video link.")
+                return None
             return video_id
 
         # Extract the video ID from the provided link ID
