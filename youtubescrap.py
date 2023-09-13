@@ -4,9 +4,7 @@ import pandas as pd
 import googleapiclient.discovery
 from pathlib import Path
 from PIL import Image
-from dotenv import load_dotenv
 import os
-load_dotenv()
 
 # --- PATH SETTINGS ---
 css_file = "main.css"
