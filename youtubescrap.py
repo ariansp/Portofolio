@@ -157,18 +157,18 @@ elif selected_page == "Youtube Scrap":
     st.header("YouTube Scrap")
 
     # Input field to enter the YouTube video link ID
-    video_link_id = st.text_input("Enter YouTube Video Link ID (e.g., Xk2Y5EsU1Ic):")
+    video_link_id = st.text_input("Enter YouTube Video Link :")
 
     if video_link_id:
         # Function to extract video ID from the link ID
         def extract_video_id(video_link_id):
             # Extract the video ID from the link ID
             if "youtube.com/watch?v=" in video_link_id:
-                video_id = video_link_id.split("v=")[1].split("&")[0]
-    # Check if the input is a short YouTube URL
-            elif "youtu.be" in video_link_id:
-                video_id = video_link_id.split("/")[-1]
-    # Handle other formats or invalid inputs
+                video_id = video_link_id.split("v=")[1].split("&")[0] # https://www.youtube.com/watch?v=SjkFTqmgegA
+        # Check if the input is a short YouTube URL
+            elif "youtu.be" in video_link_id: #https://youtu.be/B-gHb2gPGIs?feature=shared
+                video_id = video_link_id.split("?")[0].split("/")[-1]
+        # Handle other formats or invalid inputs
             else:
                 st.warning("Invalid YouTube link. Please enter a valid YouTube video link.")
                 return None
