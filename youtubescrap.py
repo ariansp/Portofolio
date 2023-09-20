@@ -17,13 +17,9 @@ profile_pic = "profile-pic1.png"
 st.title("Portfolio")
 st.write("Arian Syah Putra | Data Analyst | Data Engineer.")
 
-# Function to generate random colors for the bars
-def generate_random_colors(num_colors):
-    return ['#%06X' % random.randint(0, 0xFFFFFF) for _ in range(num_colors)]
-
 # Add a sidebar with options
 st.sidebar.title("Section")
-selected_page = st.sidebar.radio("Menu", ["About Me", "Youtube Scrap", "Dashboard"])
+selected_page = st.sidebar.selectbox("Menu", ["About Me", "Youtube Scrap", "Dashboard"])
 
 if selected_page is None:
     selected_page = "About Me"
