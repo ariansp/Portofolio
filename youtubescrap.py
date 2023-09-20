@@ -35,7 +35,6 @@ Data Analysis to enhance your data team.
     """
     EMAIL = "Ariansp08@gmail.com"
     SOCIAL_MEDIA = {
-        "Instagram": "https://instagram.com/arian.tsah",
         "LinkedIn": "https://linkedin.com/in/ariansyahputra",
         "GitHub": "https://github.com/ariansp",
     }
