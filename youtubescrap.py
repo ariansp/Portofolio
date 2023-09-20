@@ -301,7 +301,6 @@ elif selected_page == "Dashboard":
         st.bar_chart(country_count)
         st.write("Transaction Count by Country")
         # Add a separator between contents of col1 and col2
-        st.markdown("---")
 
     # Display the "TransactionDay" bar chart in the second column (col2)
     with col2:
@@ -309,6 +308,7 @@ elif selected_page == "Dashboard":
         st.write("Transaction Count by Day")
 
 # Add a footer with improved styling
+
 st.markdown(
     """
     <style>
