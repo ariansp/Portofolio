@@ -5,19 +5,27 @@ import googleapiclient.discovery
 from pathlib import Path
 from PIL import Image
 import os
+import pandas as pd
+import matplotlib.pyplot as plt
+import random
 
 # --- PATH SETTINGS ---
 css_file = "main.css"
 resume_file = "CV.pdf"
+porto_file = "Portofolio - Big 5 Personalities .pdf"
 profile_pic = "profile-pic1.png"
 
 # Set the title and a brief description
 st.title("Portfolio")
 st.write("Arian Syah Putra | Data Analyst | Data Engineer.")
 
+# Function to generate random colors for the bars
+def generate_random_colors(num_colors):
+    return ['#%06X' % random.randint(0, 0xFFFFFF) for _ in range(num_colors)]
+
 # Add a sidebar with options
 st.sidebar.title("Section")
-selected_page = st.sidebar.radio("Menu", ["About Me", "Youtube Scrap"])
+selected_page = st.sidebar.radio("Menu", ["About Me", "Youtube Scrap", "Dashboard"])
 
 if selected_page is None:
     selected_page = "About Me"
@@ -60,6 +68,12 @@ Data Analysis to enhance your data team.
             label=" 📄 Download Resume",
             data=PDFbyte,
             file_name=Path(resume_file).name,
+            mime="application/octet-stream",
+        )
+        st.download_button(
+            label=" 📄 Download Portofolio",
+            data=PDFbyte,
+            file_name=Path(porto_file).name,
             mime="application/octet-stream",
         )
         st.write("📫", EMAIL)
@@ -247,6 +261,54 @@ elif selected_page == "Youtube Scrap":
 
         if st.button("Download Scraped Data"):
             st.markdown(download_data(comments_df_limit, "youtube_comments"), unsafe_allow_html=True)
+
+elif selected_page == "Dashboard":
+    def get_data_from_csv():
+        df = pd.read_csv("transaction_clean.csv", nrows=10000)
+        return df
+
+    df = get_data_from_csv()
+    
+    # Create a dropdown filter for TransactionDay
+    days = df["TransactionDay"].unique()
+    selected_day = st.selectbox("Select Transaction Day", ["All Days"] + list(days))
+
+    # Filter the dataframe based on the selected day or show all days
+    if selected_day == "All Days":
+        filtered_df = df
+    else:
+        filtered_df = df[df["TransactionDay"] == selected_day]
+
+    # Display the top 5 Transaction Hours based on TransactionHour
+    top_hours = filtered_df["TransactionTime"].value_counts().head(10)
+    st.write("Top 10 Transaction Time:")
+    
+    # Display the top hours in a table with customized column names and remove the index
+    top_hours_df = pd.DataFrame({"Transaction Time": top_hours.index, "Total of Transaction": top_hours.values})
+    st.table(top_hours_df.rename(columns={"Transaction Time": "Transaction Time", "Total of Transaction": "Total Transaction"}))
+
+
+    # Create a bar chart for the count of transactions per country
+    country_count = filtered_df["Country"].value_counts()
+
+    # Create a bar chart for the count of transactions per day
+    day_count = filtered_df["TransactionDay"].value_counts()
+
+    # Calculate and display the most transaction hour  
+    most_transaction_hour = filtered_df["TransactionHours"].value_counts()
+
+    # Display the "Country" bar chart in the first column
+    col1, col2= st.columns(2)
+    with col1:
+        st.bar_chart(country_count)
+        st.write("Transaction Count by Country")
+        # Add a separator between contents of col1 and col2
+        st.markdown("---")
+
+    # Display the "TransactionDay" bar chart in the second column (col2)
+    with col2:
+        st.bar_chart(day_count)
+        st.write("Transaction Count by Day")
 
 # Add a footer with improved styling
 st.markdown(
