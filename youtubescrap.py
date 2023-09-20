@@ -6,7 +6,6 @@ from pathlib import Path
 from PIL import Image
 import os
 import pandas as pd
-import random
 
 # --- PATH SETTINGS ---
 css_file = "main.css"
