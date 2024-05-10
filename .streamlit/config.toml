@@ -1,3 +1,6 @@
+[deprecation]
+showPyplotGlobalUse = false
+
 [theme]
 # Primary accent color for interactive elements.
 primaryColor = "#62B1F9"

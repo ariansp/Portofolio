@@ -6,6 +6,13 @@ from pathlib import Path
 from PIL import Image
 import os
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn import svm
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
 
 # --- PATH SETTINGS ---
 css_file = "main.css"
@@ -19,7 +26,7 @@ st.write("Arian Syah Putra | Data Analyst | Data Engineer.")
 
 # Add a sidebar with options
 st.sidebar.title("Section")
-selected_page = st.sidebar.selectbox("Menu", ["About Me", "Youtube Scrap", "Dashboard"])
+selected_page = st.sidebar.selectbox("Menu", ["About Me", "Youtube Scrap", "Dashboard & ML"])
 
 if selected_page is None:
     selected_page = "About Me"
@@ -37,6 +44,7 @@ Data Analysis to enhance your data team.
     SOCIAL_MEDIA = {
         "LinkedIn": "https://linkedin.com/in/ariansyahputra",
         "GitHub": "https://github.com/ariansp",
+        "Portofolio": "https://drive.google.com/drive/folders/1qBKCV_oZlt3Y8zsWHAIW3oAbqR9s7gkm?usp=sharing"
     }
     
     # --- LOAD CSS, PDF & PROFILE PIC ---
@@ -85,7 +93,7 @@ Data Analysis to enhance your data team.
     st.write("08/2019 - 06/2023")
     st.write(
         """
-    - ✔️ B.CompSc. Computer Science, North Sumatera University, Indonesia (Cumlaude, 3.73/4.00)
+    - ✔️ B.CompSc. Computer Science, North Sumatera University, Indonesia (Cumlaude, 3.78/4.00)
     """
     )
     st.write("08/2022 - 12/2022")
@@ -110,8 +118,8 @@ Data Analysis to enhance your data team.
     st.subheader("Hard Skills")
     st.write(
         """
-    - 👩‍💻 Programming: Python, SQL, Java, C/C++, Pascal
-    - 📊 Data Visulization: PowerBi, MS Excel, Spreadsheet
+    - 👩‍💻 Programming: Python, SQL, Java, C/C++, Spark
+    - 📊 Data Visulization & Tools: PowerBi, MS Excel, Spreadsheet, Power Automate, Powerapps, Azure Databricks, Azure Datafactory, Azure Data Warehouse
     - 🗄️ Databases: PostgreSQl, MySQL
     """
     )
@@ -123,8 +131,19 @@ Data Analysis to enhance your data team.
     st.write("---")
 
     # --- JOB 1
+    st.write("🚧", "**Business Intellegence Specialist | OCS Group Indonesia**")
+    st.write("11/2023 - Present")
+    st.write(
+        """
+    - ► Crafting interactive data visualizations on maintenance, employee attendance, and performance metrics, Empower operational teams with actionable insights for informed decision-making. Transforming raw data into dynamic visuals enhances efficiency and productivity.
+    - ► Maximizing Power BI efficiency, I orchestrate near real-time data preprocessing using Azure Data Factory and Azure Databricks. This dynamic approach ensures seamless integration and transformation, significantly enhancing data analysis and reporting performance.
+    - ► Python-based data scraping to generate news updates from various news portals. This automated process efficiently gathers relevant information, providing timely news updates for analysis and dissemination
+        """
+    )
+
+    # --- JOB 2
     st.write("🚧", "**Data Engineer Freelance | Windata**")
-    st.write("07/2023 - Present")
+    st.write("07/2023 - 11/2023")
     st.write(
         """
     - ► Armed with RapidAPI, I became a data detective. Imagine crafting queries to fetch real-time data, maneuvering around rate limits, and uncovering trends and sentiments. Each API call felt like solving a puzzle, revealing stories hidden in the data
@@ -136,7 +155,7 @@ Data Analysis to enhance your data team.
     """
     )
 
-    # --- JOB 2
+    # --- JOB 3
     st.write('\n')
     st.write("🚧", "**Data Analyst Freelance | Windata**")
     st.write("12/2022 - 06/2023")
@@ -255,55 +274,147 @@ elif selected_page == "Youtube Scrap":
         if st.button("Download Scraped Data"):
             st.markdown(download_data(comments_df_limit, "youtube_comments"), unsafe_allow_html=True)
 
-elif selected_page == "Dashboard":
-    def get_data_from_csv():
-        df = pd.read_csv("transaction_clean.csv", nrows=10000)
-        return df
+elif selected_page == "Dashboard & ML":
 
-    df = get_data_from_csv()
+    option = st.sidebar.selectbox("Dashboard:", ("Transaction dashboard", "Lung Cancer With ML"))
     
-    # Create a dropdown filter for TransactionDay
-    days = df["TransactionDay"].unique()
-    selected_day = st.selectbox("Select Transaction Day", ["All Days"] + list(days))
+    if option == 'Transaction dashboard':
+        def get_data_from_csv():
+            df = pd.read_csv("transaction_clean.csv", nrows=10000)
+            return df
 
-    # Filter the dataframe based on the selected day or show all days
-    if selected_day == "All Days":
-        filtered_df = df
-    else:
-        filtered_df = df[df["TransactionDay"] == selected_day]
+        df = get_data_from_csv()
 
-    # Display the top 5 Transaction Hours based on TransactionHour
-    top_hours = filtered_df["TransactionTime"].value_counts().head(10)
-    st.write("Top 10 Transaction Time:")
-    
-    # Display the top hours in a table with customized column names and remove the index
-    top_hours_df = pd.DataFrame({"Transaction Time": top_hours.index, "Total of Transaction": top_hours.values})
-    st.table(top_hours_df.rename(columns={"Transaction Time": "Transaction Time", "Total of Transaction": "Total Transaction"}))
+        # Create a dropdown filter for TransactionDay
+        days = df["TransactionDay"].unique()
+        selected_day = st.selectbox("Select Transaction Day", ["All Days"] + list(days))
+
+        # Filter the dataframe based on the selected day or show all days
+        if selected_day == "All Days":
+            filtered_df = df
+        else:
+            filtered_df = df[df["TransactionDay"] == selected_day]
+
+        # Display the top 5 Transaction Hours based on TransactionHour
+        top_hours = filtered_df["TransactionTime"].value_counts().head(10)
+        st.write("Top 10 Transaction Time:")
+
+        # Display the top hours in a table with customized column names and remove the index
+        top_hours_df = pd.DataFrame({"Transaction Time": top_hours.index, "Total of Transaction": top_hours.values})
+        st.table(top_hours_df.rename(columns={"Transaction Time": "Transaction Time", "Total of Transaction": "Total Transaction"}))
 
 
-    # Create a bar chart for the count of transactions per country
-    country_count = filtered_df["Country"].value_counts()
+        # Create a bar chart for the count of transactions per country
+        country_count = filtered_df["Country"].value_counts()
 
-    # Create a bar chart for the count of transactions per day
-    day_count = filtered_df["TransactionDay"].value_counts()
+        # Create a bar chart for the count of transactions per day
+        day_count = filtered_df["TransactionDay"].value_counts()
 
-    # Calculate and display the most transaction hour  
-    most_transaction_hour = filtered_df["TransactionHours"].value_counts()
+        # Calculate and display the most transaction hour  
+        most_transaction_hour = filtered_df["TransactionHours"].value_counts()
 
-    # Display the "Country" bar chart in the first column
-    col1, col2= st.columns(2)
-    with col1:
-        st.bar_chart(country_count)
-        st.write("Transaction Count by Country")
-        # Add a separator between contents of col1 and col2
+        # Display the "Country" bar chart in the first column
+        col1, col2= st.columns(2)
+        with col1:
+            st.bar_chart(country_count)
+            st.write("Transaction Count by Country")
+            # Add a separator between contents of col1 and col2
 
-    # Display the "TransactionDay" bar chart in the second column (col2)
-    with col2:
-        st.bar_chart(day_count)
-        st.write("Transaction Count by Day")
+        # Display the "TransactionDay" bar chart in the second column (col2)
+        with col2:
+            st.bar_chart(day_count)
+            st.write("Transaction Count by Day")
+
+    elif option == 'Lung Cancer With ML':
+        def get_data_from_csv():
+            df = pd.read_csv("survey_lung_cancer.csv", delimiter=",", nrows=10000)
+            df.drop_duplicates(inplace=True)
+            df['GENDER'] = df['GENDER'].replace(['M', 'F'], [0, 1])
+            df['LUNG_CANCER'] = df['LUNG_CANCER'].replace(['YES', 'NO'], [1, 0])
+            
+            return df
+
+        df = get_data_from_csv()
+
+        st.write("Displaying DataFrame (structured view):")
+        st.dataframe(df)
+        st.write("---")
+        st.write("Lung Cancer Description")
+        st.dataframe(df.describe())
+
+        st.write("---")
+        st.write("Lung Cancer Data Visualization")
+        num_list=['GENDER', 'AGE', 'SMOKING', 'YELLOW_FINGERS', 'ANXIETY',
+       'PEER_PRESSURE', 'CHRONIC DISEASE', 'FATIGUE ', 'ALLERGY ', 'WHEEZING',
+       'ALCOHOL CONSUMING', 'COUGHING', 'SHORTNESS OF BREATH',
+       'SWALLOWING DIFFICULTY', 'CHEST PAIN']
+
+        fig, axes = plt.subplots(6, 3, figsize=(15, 20))
+
+        for i, ax in enumerate(axes.flatten()):
+            if i < len(num_list):
+                sns.histplot(data=df, x=num_list[i], hue='LUNG_CANCER', kde=True, ax=ax)
+                ax.set_title(num_list[i])
+            else:
+                ax.axis('off')  # Turn off extra subplots if there are not enough features
+
+        plt.tight_layout()
+
+        hist_fig = plt.gcf()
+        st.pyplot(hist_fig)
+
+# Heatmap
+        df = get_data_from_csv()
+
+ 
+        st.set_option('deprecation.showPyplotGlobalUse', False)
+        st.write("---")
+        st.write("Lung Cancer Heatmap")
+        plt.figure(figsize=(15, 15))
+        sns.heatmap(df.corr(), annot=True, cbar=True, cmap='Blues', fmt='.1f')
+        heatmap_fig = plt.gcf()
+        st.pyplot(heatmap_fig)
+
+        #SVM
+        # Split data into features and target
+        st.write("---")
+        st.write("Data Modelling")
+
+               # Split data into features and target
+        X = df.drop(columns=['LUNG_CANCER'])
+        y = df['LUNG_CANCER']
+
+        # Train-test split
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        # Models
+        models = [
+            ('SVM', svm.SVC(kernel='linear')),
+            ('Random Forest', RandomForestClassifier(n_estimators=100)),
+            ('Decision Tree', DecisionTreeClassifier())
+        ]
+
+        # Evaluate models and display results
+        for i, (name, model) in enumerate(models):
+            st.write(f"--- {name} ---")
+            st.write(f"{name} Model Evaluation:")
+            model.fit(X_train, y_train)
+            train_score = model.score(X_train, y_train)
+            test_pred = model.predict(X_test)
+            test_acc = accuracy_score(y_test, test_pred)
+            st.write(f"Training Accuracy: {train_score:.2f}")
+            st.write(f"Test Accuracy: {test_acc:.2f}")
+            st.write("Classification Report:")
+            if name == 'Support Vector Machine':
+                report = classification_report(y_test, test_pred, output_dict=True)
+                report_df = pd.DataFrame(report).transpose()
+                st.dataframe(report_df)
+            else:
+                report_df = classification_report(y_test, test_pred, output_dict=True)
+                st.dataframe(pd.DataFrame(report_df).transpose())
+
 
 # Add a footer with improved styling
-
 st.markdown(
     """
     <style>
