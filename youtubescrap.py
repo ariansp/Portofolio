@@ -274,7 +274,7 @@ elif selected_page == "Youtube Scrap":
         if st.button("Download Scraped Data"):
             st.markdown(download_data(comments_df_limit, "youtube_comments"), unsafe_allow_html=True)
 
-elif selected_page == "Dashboard &":
+elif selected_page == "Dashboard & ML":
 
     option = st.sidebar.selectbox("Dashboard:", ("Transaction dashboard", "Lung Cancer With ML"))
     
