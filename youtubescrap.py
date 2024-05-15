@@ -23,7 +23,7 @@ profile_pic = "profile-pic1.png"
 
 # Set the title and a brief description
 st.title("Portfolio")
-st.write("Arian Syah Putra | Data Analyst | Data Engineer.")
+st.write("Arian Syah Putra | BI Specialist | Data Analyst | Data Engineer.")
 
 # Add a sidebar with options
 st.sidebar.title("Section")
@@ -429,7 +429,8 @@ st.markdown(
     """
     , unsafe_allow_html=True
 )
-## Visitor count
+
+# Function to count and get the total visitors
 def count_visitor():
     # Path to the CSV file
     csv_file = "view_stats.csv"
@@ -439,17 +440,38 @@ def count_visitor():
         df = pd.read_csv(csv_file)
         df.loc[0, 'total_visitors'] += 1  # Increment the visitor count
     except FileNotFoundError:
-        df = pd.DataFrame()  # Initialize with the first visitor
-
+        df = pd.DataFrame({'total_visitors': [1]})  # Initialize with the first visitor
+    
     # Write the updated DataFrame back to the CSV file
     df.to_csv(csv_file, index=False)
+    
+    # Return the updated visitor count
+    return df.loc[0, 'total_visitors']
 
-# Increment the visitor count
-count_visitor()
+# Increment the visitor count and get the updated total visitor count
+total_visitors = count_visitor()
 
-# Read the updated visitor count
-df = pd.read_csv("view_stats.csv")
-total_visitors = df.loc[0, 'total_visitors']
+# Your email address
+email = "ariansp08@gmail.com"
 
-# Display the visitor count and email in the Streamlit app
-st.markdown(f"ariansp08@gmail.com | Total Visitor : {total_visitors}")
+# Footer template with placeholders for email and visitor count
+footer_template = """
+<style>
+.footer {{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(29, 29, 34, 0.8);  /* Semi-transparent background */
+    color: white;
+    text-align: center;
+}}
+</style>
+<div class='footer'>
+    <p>Email: {email} | Total Visitors: {total_visitors}</p>
+</div>
+"""
+
+# Render the footer with the actual email and visitor count
+footer = footer_template.format(email=email, total_visitors=total_visitors)
+st.markdown(footer, unsafe_allow_html=True)
