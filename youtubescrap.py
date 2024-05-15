@@ -13,6 +13,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
+import sqlite3
 
 # --- PATH SETTINGS ---
 css_file = "main.css"
@@ -428,4 +429,27 @@ st.markdown(
     """
     , unsafe_allow_html=True
 )
-st.markdown("ariansp08@gmail.com")
+## Visitor count
+def count_visitor():
+    # Path to the CSV file
+    csv_file = "view_stats.csv"
+    
+    # Try to read the CSV file, if it doesn't exist, create it with an initial visitor count
+    try:
+        df = pd.read_csv(csv_file)
+        df.loc[0, 'total_visitors'] += 1  # Increment the visitor count
+    except FileNotFoundError:
+        df = pd.DataFrame()  # Initialize with the first visitor
+
+    # Write the updated DataFrame back to the CSV file
+    df.to_csv(csv_file, index=False)
+
+# Increment the visitor count
+count_visitor()
+
+# Read the updated visitor count
+df = pd.read_csv("view_stats.csv")
+total_visitors = df.loc[0, 'total_visitors']
+
+# Display the visitor count and email in the Streamlit app
+st.markdown(f"ariansp08@gmail.com | Total Visitor : {total_visitors}")
