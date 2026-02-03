@@ -109,7 +109,7 @@ st.sidebar.title("🧭 Screening Setup")
 role = st.sidebar.radio("Evaluation Perspective", ["HR", "Tech", "Manager"])
 max_cv = st.sidebar.slider("Max CV per run", 1, 20, 10)
 st.sidebar.markdown("---")
-st.sidebar.caption("No login required • Session-based analysis")
+st.sidebar.caption("Made by Arian Syahputra")
 
 # ==================================================
 # MAIN INPUT
